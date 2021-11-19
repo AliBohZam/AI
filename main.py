@@ -152,16 +152,15 @@ class MPU():
 
 class Servo:
     def __init__(self, pin, minDuty, maxDuty):
-        self.pin = pin
         self.min = minDuty
         self.max = maxDuty
-        self.servo = PWM(Pin(pin))
-        self.servo.freq(50)
-        self.servo.duty_u16((minDuty + maxDuty) >> 1)
+        self.pwm = PWM(Pin(pin))
+        self.pwm.freq(50)
+        self.pwm.duty_u16((minDuty + maxDuty) >> 1)
 
     def setServo(self, level):
         level = level % 9
-        self.servo.duty_u16(((self.max - self.min) >> 3) * level + self.min)
+        self.pwm.duty_u16(((self.max - self.min) >> 3) * level + self.min)
 
 class Sonar:
     def __init__(self, pin):
