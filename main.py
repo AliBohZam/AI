@@ -6,42 +6,37 @@ class LCD:
         self.i2c = I2C(0, scl=Pin(scl), sda=Pin(sda))
 
     class Color():
-        Red = 0
-        Green = 1
-        Blue = 2
-        Yellow = 3
-        Cyan = 4
-        Magenta = 5
+        Yellow_1 = 0
+        Yellow_2 = 1
+        Yellow_3 = 2
+        Yellow_4 = 3
+        Peace = 4
 
     def setBackLight(self, color):
-        color = color % 6
+        color = color % 4
         self.i2c.writeto_mem(0x62, 0, bytes('\x00', 'utf8'))
         self.i2c.writeto_mem(0x62, 1, bytes('\x00', 'utf8'))
         self.i2c.writeto_mem(0x62, 8, bytes('\xaa', 'utf8'))
-        if color == self.Color.Red:
-            self.i2c.writeto_mem(0x62, 4, bytes('\xff', 'utf8'))
-            self.i2c.writeto_mem(0x62, 3, bytes('\x00', 'utf8'))
-            self.i2c.writeto_mem(0x62, 2, bytes('\x00', 'utf8'))
-        elif color == self.Color.Green:
+        if color == self.Color.Yellow_1:
             self.i2c.writeto_mem(0x62, 4, bytes('\x00', 'utf8'))
-            self.i2c.writeto_mem(0x62, 3, bytes('\xff', 'utf8'))
-            self.i2c.writeto_mem(0x62, 2, bytes('\x00', 'utf8'))
-        elif color == self.Color.Blue:
+            self.i2c.writeto_mem(0x62, 3, bytes('\x55', 'utf8'))
+            self.i2c.writeto_mem(0x62, 2, bytes('\x99', 'utf8'))
+        elif color == self.Color.Yellow_2:
             self.i2c.writeto_mem(0x62, 4, bytes('\x00', 'utf8'))
-            self.i2c.writeto_mem(0x62, 3, bytes('\x00', 'utf8'))
-            self.i2c.writeto_mem(0x62, 2, bytes('\xff', 'utf8'))
-        elif color == self.Color.Yellow:
-            self.i2c.writeto_mem(0x62, 4, bytes('\xff', 'utf8'))
-            self.i2c.writeto_mem(0x62, 3, bytes('\xff', 'utf8'))
-            self.i2c.writeto_mem(0x62, 2, bytes('\x00', 'utf8'))
-        elif color == self.Color.Cyan :
+            self.i2c.writeto_mem(0x62, 3, bytes('\x99', 'utf8'))
+            self.i2c.writeto_mem(0x62, 2, bytes('\x55', 'utf8'))
+        elif color == self.Color.Yellow_3:
             self.i2c.writeto_mem(0x62, 4, bytes('\x00', 'utf8'))
-            self.i2c.writeto_mem(0x62, 3, bytes('\xff', 'utf8'))
-            self.i2c.writeto_mem(0x62, 2, bytes('\xff', 'utf8'))
-        elif color == self.Color.Magenta:
+            self.i2c.writeto_mem(0x62, 3, bytes('\xbb', 'utf8'))
+            self.i2c.writeto_mem(0x62, 2, bytes('\x77', 'utf8'))
+        elif color == self.Color.Yellow_4:
+            self.i2c.writeto_mem(0x62, 4, bytes('\x00', 'utf8'))
+            self.i2c.writeto_mem(0x62, 3, bytes('\x77', 'utf8'))
+            self.i2c.writeto_mem(0x62, 2, bytes('\xbb', 'utf8'))
+        elif color == self.Color.Peace:
             self.i2c.writeto_mem(0x62, 4, bytes('\xff', 'utf8'))
-            self.i2c.writeto_mem(0x62, 3, bytes('\x00', 'utf8'))
-            self.i2c.writeto_mem(0x62, 2, bytes('\xff', 'utf8'))
+            self.i2c.writeto_mem(0x62, 3, bytes('??', 'utf8'))
+            self.i2c.writeto_mem(0x62, 2, bytes('??', 'utf8'))
 
     def textCommand(self, cmd):
         self.i2c.writeto_mem(0x3e, 0x80, cmd)
@@ -194,11 +189,11 @@ class Sonar:
 def tick(timer):
     global counter
 
-    lcd.setBackLight(counter >> 5)
+    lcd.setBackLight(counter >> 3)
     led.toggle()
 
     # TODO use AI to drive servos
-    salt = 0xbeefbeef
+    salt = 0xa5a5a5a5
     sugar = 0xdeaddead
     servo1.setServo(counter ^ salt)
     servo2.setServo(counter ^ sugar)
